@@ -1,0 +1,97 @@
+const int teclaspin[8] = {4, 5, 16, 17, 18, 19, 21, 22}; //GPIOs de ESP32 
+const int M1STEPDIR[3] = {,,}; //X  pasos/(adelante/atras)/enable
+const int M2STEPDIR[3] = {,,}; //Y  pasos/(horario/antihorario)/enable    EL ENABLE ES COMUN ENTRE LOS TRES
+const int M3STEPDIR[3] = {,,}; //Z  pasos/(arriba/abajo)/enable
+
+void setup() {
+  Serial.begin(9600);
+
+//INICIALIZACION DE LOS MOTORES (3 en total)
+
+for (int i = 0; i < 3; i++){
+
+  pinMode(M1STEPDIR[i], OUTPUT);
+  pinMode(M2STEPDIR[i], OUTPUT);
+  pinMode(M3STEPDIR[i], OUTPUT);
+}
+
+//INICIALIZACION DE LAS TECLAS
+  for (int i = 0; i < 8; i++) {
+
+    pinMode(teclaspin[i], INPUT);
+  }
+}
+
+void loop() {
+
+
+  int select = -1;
+
+  for (int i = 0; i < 8; i++) {
+    if (digitalRead(teclaspin[i]) == 0) {
+      select = teclaspin[i];
+      break;  // toma el primero que encuentra
+    }
+  }
+
+  printf("Tecla presionada %d\n", select);
+
+  switch (select) {
+
+    case 4: //EJE X
+      printf("ATRAS\n");
+
+      digitalWrite(M1STEPDIR[2], 0); //EN
+
+      digitalWrite(M1STEPDIR[1], 1); //DIR
+
+      digitalWrite(M1STEPDIR[0], 1); //STEP
+      digitalWrite(M1STEPDIR[0], 0);
+
+
+      digitalWrite(M1STEPDIR[2], 1); //EN
+
+      delay(100);
+      break;
+
+    case 5:
+      printf("ABRE\n");
+      delay(100);
+      break;
+
+    case 16:
+      printf("ARRIBA\n");
+      delay(100);
+      break;
+
+    case 17:
+      printf("ADELANTE\n");
+      delay(100);
+      break;
+
+    case 18:
+      printf("CIERRA\n");
+      delay(100);
+      break;
+
+    case 19:
+      printf("HORARIO\n");
+      delay(100);
+      break;
+
+    case 21:
+      printf("ANTI\n");
+      delay(100);
+      break;
+
+    case 22:
+      printf("ABAJO\n");
+      delay(100);
+      break;
+
+    default:
+      printf("Ninguna tecla presionada\n");
+      delay(100);
+      break;
+  }
+}
